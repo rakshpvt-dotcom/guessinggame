@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Guess | Number Guessing Game</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background:
+                radial-gradient(circle at 15% 20%, #27205a, transparent 40%),
+                radial-gradient(circle at 85% 80%, #4b164f, transparent 40%),
+                #080b18;
+            overflow-x: hidden;
+        }
+
+        .game-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 30px 24px;
+            border: 1px solid #ffffff25;
+            border-radius: 24px;
+            text-align: center;
+            background: #11162ddd;
+            box-shadow: 0 0 45px #00f5ff15;
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 13px;
+            letter-spacing: 4px;
+            color: #00f5ff;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: clamp(30px, 8vw, 42px);
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00f5ff, #b66bff, #ff4fbc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            color: #b7bdd8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .number-range {
+            border: 1px solid #00f5ff45;
+            background: #00f5ff0c;
+            color: #00f5ff;
+            padding: 13px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            font-size: 14px;
+        }
+
+        .input-label {
+            display: block;
+            color: #dce1ff;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #080b18;
+            color: white;
+            border: 1px solid #55517e;
+            border-radius: 12px;
+            font-size: 20px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 14px;
+        }
+
+        input:focus {
+            border-color: #00f5ff;
+            box-shadow: 0 0 15px #00f5ff25;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .guess-button {
+            color: #07101b;
+            background: linear-gradient(90deg, #00f5ff, #8c7bff);
+        }
+
+        .restart-button {
+            margin-top: 12px;
+            color: #e4e6ff;
+            background: #ffffff10;
+            border: 1px solid #ffffff25;
+        }
+
+        .message {
+            min-height: 50px;
+            margin: 20px 0;
+            padding: 14px 10px;
+            border-radius: 12px;
+            background: #ffffff08;
+            color: #d8ddfa;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .message.success {
+            color: #5dffbd;
+            border: 1px solid #5dffbd55;
+        }
+
+        .message.error {
+            color: #ff7caa;
+            border: 1px solid #ff7caa55;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .stat-box {
+            padding: 15px 8px;
+            border-radius: 12px;
+            background: #ffffff08;
+            border: 1px solid #ffffff12;
+        }
+
+        .stat-label {
+            display: block;
+            color: #a6abc8;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #00f5ff;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .footer {
+            color: #a6abc8;
+            font-size: 11px;
+            margin-top: 25px;
+            letter-spacing: 1.5px;
+            line-height: 1.8;
+        }
+
+        .footer span {
+            display: block;
+            margin-top: 5px;
+            color: #00f5ff;
+            font-weight: bold;
+            text-shadow: 0 0 12px #00f5ff70;
+        }
+
+        @media (max-width: 380px) {
+            .game-card {
+                padding: 25px 17px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="game-card">
+        <div class="logo">ARCADE EXPERIENCE</div>
+
+        <h1>NEON GUESS</h1>
+
+        <p class="subtitle">
+            Test your intuition! Guess the secret number
+            between 1 and 100.
+        </p>
+
+        <div class="number-range">
+            ✦ SECRET NUMBER RANGE: 1 – 100 ✦
+        </div>
+
+        <label class="input-label" for="guessInput">
+            ENTER YOUR GUESS
+        </label>
+
+        <input
+            id="guessInput"
+            type="number"
+            min="1"
+            max="100"
+            placeholder="Enter a number"
+            inputmode="numeric"
+            autocomplete="off"
+        >
+
+        <button class="guess-button" id="guessButton">
+            CHECK MY GUESS
+        </button>
+
+        <div class="message" id="message" role="status" aria-live="polite">
+            Ready to play? Enter a number to begin!
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <span class="stat-label">ATTEMPTS</span>
+                <span class="stat-value" id="attempts">0</span>
+            </div>
+
+            <div class="stat-box">
+                <span class="stat-label">BEST SCORE</span>
+                <span class="stat-value" id="bestScore">—</span>
+            </div>
+        </div>
+
+        <button class="restart-button" id="restartButton">
+            ↻ NEW GAME
+        </button>
+
+        <div class="footer">
+            NUMBER GUESSING GAME
+            <span>CREATED BY RAJKUMAR M (CSE)</span>
+        </div>
+    </main>
+
+    <script>
+        let secretNumber;
+        let attempts;
+        let guessedNumbers;
+        let gameOver = false;
+        let bestScore = null;
+
+        const guessInput = document.getElementById("guessInput");
+        const guessButton = document.getElementById("guessButton");
+        const restartButton = document.getElementById("restartButton");
+        const message = document.getElementById("message");
+        const attemptsDisplay = document.getElementById("attempts");
+        const bestScoreDisplay = document.getElementById("bestScore");
+
+        function startGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            guessedNumbers = [];
+            gameOver = false;
+
+            guessInput.value = "";
+            guessInput.disabled = false;
+            guessButton.disabled = false;
+            guessButton.style.opacity = "1";
+
+            attemptsDisplay.textContent = "0";
+            message.textContent =
+                "A new number is ready. Can you find it?";
+            message.className = "message";
+
+            guessInput.focus();
+        }
+
+        function checkGuess() {
+            if (gameOver) {
+                return;
+            }
+
+            const guess = Number(guessInput.value);
+
+            if (
+                guessInput.value.trim() === "" ||
+                !Number.isInteger(guess) ||
+                guess < 1 ||
+                guess > 100
+            ) {
+                message.textContent =
+                    "Please enter a whole number from 1 to 100.";
+                message.className = "message error";
+                return;
+            }
+
+            if (guessedNumbers.includes(guess)) {
+                message.textContent =
+                    "You already tried " + guess + ". Try a different number!";
+                message.className = "message error";
+                guessInput.select();
+                return;
+            }
+
+            guessedNumbers.push(guess);
+            attempts++;
+            attemptsDisplay.textContent = attempts;
+
+            if (guess === secretNumber) {
+                gameOver = true;
+
+                message.textContent =
+                    "🎉 Correct! You found the number in " +
+                    attempts +
+                    (attempts === 1 ? " attempt!" : " attempts!");
+
+                message.className = "message success";
+
+                if (bestScore === null || attempts < bestScore) {
+                    bestScore = attempts;
+                    bestScoreDisplay.textContent = bestScore;
+                }
+
+                guessInput.disabled = true;
+                guessButton.disabled = true;
+                guessButton.style.opacity = "0.5";
+            } else if (guess < secretNumber) {
+                message.textContent =
+                    "⬆ Too low! Try a HIGHER number.";
+                message.className = "message";
+            } else {
+                message.textContent =
+                    "⬇ Too high! Try a LOWER number.";
+                message.className = "message";
+            }
+
+            guessInput.value = "";
+
+            if (!gameOver) {
+                guessInput.focus();
+            }
+        }
+
+        guessButton.addEventListener("click", checkGuess);
+
+        guessInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                checkGuess();
+            }
+        });
+
+        restartButton.addEventListener("click", startGame);
+
+        startGame();
+    </script>
+</body>
+</html>
